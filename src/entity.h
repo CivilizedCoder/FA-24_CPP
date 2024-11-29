@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum EntityType {Cat, Obstacle, Bounce};
+enum EntityType {Cat, Obstacle, Bounce, Phase, Hurt, Goal};
 enum EntityFacing {Up, Down, Left, Right};
 
 class Entity

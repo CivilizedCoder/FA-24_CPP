@@ -47,32 +47,75 @@ void Controller::gameLoop()
     PubSub::subscribe("entity", this);
     PubSub::subscribe("player", this);
 
-    InitWindow(screenWidth, screenHeight, "Cat Moving");
+    InitWindow(screenWidth, screenHeight, "Escape the Ship");
     SetTargetFPS(60);
 
-    // Load the level
+    // First Hall.
 
     float x = 320;
     float y = 280;
     world.addPlayer(x, y, 32, 32, Cat);
 
+    
+
     x = 160;
+    y = 352 - 64 - 32;
+    world.addEntity(x, y, 32, 32, Obstacle);
+    y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
 
-    y = 352;
-    for (x=160; x <= 640; x += 32)
-        world.addEntity(x, y, 32, 32, Obstacle);
+    y -= 128;
+    world.addEntity(x, y, 32, 32, Goal);
 
+    y = 352;
+    for (x = 160; x <= 640; x += 32) {
+        if (x < 220)
+            world.addEntity(x, y, 32, 32, Obstacle);
+        else if ((int)x % 128 == 0 && x != 640) 
+            world.addEntity(x, y, 32, 32, Bounce);
+        else if (x == 640)
+            world.addEntity(x, y, 32, 32, Phase);
+        else
+            world.addEntity(x, y, 32, 32, Obstacle);
+
+    }
     world.addEntity(x-64, y-32, 32, 32, Bounce);
 
 
 
     x = 160;
     y = 352 - 32 * 4;
-    for (x = 160; x <= 640; x += 32)
-        world.addEntity(x, y, 32, 32, Obstacle);
+    for (x = 160; x <= 640; x += 32) {
+        if((int)x % 128 == 0)
+            world.addEntity(x, y, 32, 32, Hurt);
+        else
+            world.addEntity(x, y, 32, 32, Obstacle);
+
+
+    }
+    //640
+   
+    //upward tunnel
+    x = 640;
+    y = 352;
+
+    for(x = 640; x < 640 + 32*4; x += 32)
+        world.addEntity(x, y, 32, 32, Hurt);
+    y -= 64+32;
+
+    for (x = 640 + 64; x > 640; x -= 32)
+        world.addEntity(x, y, 32, 32, Hurt);
+
+
+   
+
+
+
+
+
+
 
 
     // Go into the main loop

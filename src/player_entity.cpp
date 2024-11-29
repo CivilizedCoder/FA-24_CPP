@@ -58,10 +58,10 @@ void PlayerEntity::receiveMessage(string channel, string message, void* data)
 			setMoving(true);
 			setFacing(Right);
 
-			targetX = getX() + 32;
+			targetX = getX() + speedX;
 			targetY = getY();
-			speedX = .5;
-			movementCountdown = 60;
+			speedX = 1;
+			movementCountdown = 2;
 			
 		}
 
@@ -69,9 +69,9 @@ void PlayerEntity::receiveMessage(string channel, string message, void* data)
 		{
 			setMoving(true);
 			setFacing(Left);
-			speedX = -.5;
-			targetX = getX() - 32;
-			movementCountdown = 60;
+			speedX = -1;
+			targetX = getX() + speedX;
+			movementCountdown = 2;
 
 		}
 
@@ -117,8 +117,22 @@ bool PlayerEntity::handleCollisions()
 			}
 		}
 		if (entity->getType() == Bounce) {
-			speedY = -12;
+			if (!flip)
+				speedY = -12;
+			else
+				speedY = 12;
 			
+		}
+		if (entity->getType() == Hurt) {
+			targetX = 320;
+			targetY = 280;
+			setX(320);
+			setY(280);
+			speedY = 0;
+		}
+		if (entity->getType() == Goal) {
+			//Game Over
+
 		}
 	}
 

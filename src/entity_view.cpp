@@ -24,6 +24,17 @@ map<EntityType, SpriteSheetInfo> spriteMapping = {
 { Bounce, {"resources/wall.png", 1, {
 	{Right, 0}}
 } }
+,
+{ Hurt, {"resources/red_wall.png", 1, {
+	{Right, 0}}
+} },
+{ Phase, {"resources/wall.png", 1, {
+	{Right, 0}}
+} }
+,
+{ Goal, {"resources/blue_wall.png", 1, {
+	{Right, 0}}
+} }
 };
 
 EntityView::EntityView(Entity *entity)
