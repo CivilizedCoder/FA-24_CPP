@@ -25,14 +25,14 @@ map<EntityType, SpriteSheetInfo> spriteMapping = {
 	{Right, 0}}
 } }
 ,
-{ Hurt, {"resources/red_wall.png", 1, {
+{ Hurt, {"resources/purple_wall.png", 1, {
 	{Right, 0}}
 } },
 { Phase, {"resources/wall.png", 1, {
 	{Right, 0}}
 } }
 ,
-{ Goal, {"resources/blue_wall.png", 1, {
+{ Goal, {"resources/golden_wall.png", 1, {
 	{Right, 0}}
 } }
 };

@@ -81,7 +81,7 @@ void Controller::gameLoop()
             world.addEntity(x, y, 32, 32, Obstacle);
 
     }
-    world.addEntity(x-64, y-32, 32, 32, Bounce);
+    //world.addEntity(x-64, y-32, 32, 32, Bounce);
 
 
 
@@ -101,14 +101,27 @@ void Controller::gameLoop()
     x = 640;
     y = 352;
 
-    for(x = 640; x < 640 + 32*4; x += 32)
+    for(x = 640; x < 640 + 32*5; x += 32)
         world.addEntity(x, y, 32, 32, Hurt);
     y -= 64+32;
 
     for (x = 640 + 64; x > 640; x -= 32)
         world.addEntity(x, y, 32, 32, Hurt);
+    x += 32 * 5;
+    for (y += 32 * 3; y > 64 + 32; y -= 32)
+        world.addEntity(x, y, 32, 32, Hurt);
 
 
+
+
+
+
+    x = 160;
+    y = 352 - 32 * 7;
+    for (x = 160; x <= 640 + 4*32; x += 32) {
+        world.addEntity(x, y, 32, 32, Bounce);
+
+    }
    
 
 

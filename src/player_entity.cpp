@@ -20,6 +20,19 @@ PlayerEntity::PlayerEntity(float x, float y, int width, int height, EntityType t
 
 void PlayerEntity::tick()
 {
+
+	if (getX() == 320 && getY() > 317 && getY() < 321) {
+		string text = "'W' to fly \n\n'A' and 'D' to move.\n\n'SPACE' to flip gravity.";
+		DrawText(text.c_str(), 10, 350, 30, BLACK);
+	}
+
+
+
+	if (getY() > 350) {
+		string secret = "Secret area accessed";
+		DrawText(secret.c_str(), 10, 10, 20, BLACK);
+	}
+			
 	if (movementCountdown > 0)
 	{
 		movementCountdown--;
@@ -53,38 +66,41 @@ void PlayerEntity::receiveMessage(string channel, string message, void* data)
 	{
 		PlayerAction* action = (PlayerAction*)data;
 
-		if (*action == PlayerRight)
-		{
-			setMoving(true);
-			setFacing(Right);
+		
+		if (!(getX() == 160 && getY() == 192)) {
+			if (*action == PlayerRight)
+			{
+				setMoving(true);
+				setFacing(Right);
 
-			targetX = getX() + speedX;
-			targetY = getY();
-			speedX = 1;
-			movementCountdown = 2;
-			
-		}
+				targetX = getX() + speedX;
+				targetY = getY();
+				speedX = 1;
+				movementCountdown = 2;
 
-		if (*action == PlayerLeft)
-		{
-			setMoving(true);
-			setFacing(Left);
-			speedX = -1;
-			targetX = getX() + speedX;
-			movementCountdown = 2;
+			}
 
-		}
+			if (*action == PlayerLeft)
+			{
+				setMoving(true);
+				setFacing(Left);
+				speedX = -1;
+				targetX = getX() + speedX;
+				movementCountdown = 2;
 
-		if (*action == PlayerUp)
-		{
-			if (flip == false)
-				speedY -= 0.5;
-			else
-				speedY += 0.5;
+			}
 
-		}
-		if (*action == PlayerJump) {
-			flip = !flip;
+			if (*action == PlayerUp)
+			{
+				if (flip == false)
+					speedY -= 0.5;
+				else
+					speedY += 0.5;
+
+			}
+			if (*action == PlayerJump) {
+				flip = !flip;
+			}
 		}
 
 	}
@@ -94,6 +110,16 @@ bool PlayerEntity::handleCollisions()
 {
 	for (Entity* entity : collisions)
 	{
+		if (entity->getType() == Goal) {
+
+			string game = "You Won!\n\n\n\n\n\n\nGame Over";
+			DrawText(game.c_str(), 10, 300, 90, BLUE);
+			targetX = 160;
+			targetY = 192;
+			setX(160);
+			setY(192);
+			speedY = 0;
+		}
 		if (entity->getType() == Obstacle)
 		{
 			int xDistance = abs(getX() - entity->getX());
@@ -118,9 +144,9 @@ bool PlayerEntity::handleCollisions()
 		}
 		if (entity->getType() == Bounce) {
 			if (!flip)
-				speedY = -12;
+				speedY = -7;
 			else
-				speedY = 12;
+				speedY = 7;
 			
 		}
 		if (entity->getType() == Hurt) {
@@ -130,10 +156,8 @@ bool PlayerEntity::handleCollisions()
 			setY(280);
 			speedY = 0;
 		}
-		if (entity->getType() == Goal) {
-			//Game Over
 
-		}
+
 	}
 
 	collisions.clear();
