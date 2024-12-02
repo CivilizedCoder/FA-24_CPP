@@ -5,6 +5,11 @@
 
 #include <iostream>
 
+
+// if(channel == "entity" && message == "new")
+// PubSub::publish("action", "player", &action);
+
+
 PlayerEntity::PlayerEntity(float x, float y, int width, int height, EntityType type)
 	: Entity(x, y, width, height, type)
 {
@@ -110,6 +115,11 @@ bool PlayerEntity::handleCollisions()
 {
 	for (Entity* entity : collisions)
 	{
+		if (entity->getType() == Switch) {
+			world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
+			PubSub::publish("action", "switch", 0);
+			cout << "hi";
+		}
 		if (entity->getType() == Goal) {
 
 			string game = "You Won!\n\n\n\n\n\n\nGame Over";

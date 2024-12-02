@@ -4,6 +4,7 @@
 #include "pubsub.h"
 #include "entity_view.h"
 #include "player_entity.h"
+#include <iostream>
 
 class Controller : public Subscriber
 {
@@ -63,11 +64,12 @@ void Controller::gameLoop()
     world.addEntity(x, y, 32, 32, Obstacle);
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
+    world.addEntity(160 + 64, 352 - 64, 32, 32, Switch);
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
 
-    y -= 128;
-    world.addEntity(x, y, 32, 32, Goal);
+    //y = 352-32
+    //switch enables world.addEntity(160, 352 -32 -128, 32, 32, Goal);
 
     y = 352;
     for (x = 160; x <= 640; x += 32) {
@@ -101,6 +103,7 @@ void Controller::gameLoop()
     x = 640;
     y = 352;
 
+
     for(x = 640; x < 640 + 32*5; x += 32)
         world.addEntity(x, y, 32, 32, Hurt);
     y -= 64+32;
@@ -110,11 +113,6 @@ void Controller::gameLoop()
     x += 32 * 5;
     for (y += 32 * 3; y > 64 + 32; y -= 32)
         world.addEntity(x, y, 32, 32, Hurt);
-
-
-
-
-
 
     x = 160;
     y = 352 - 32 * 7;
@@ -184,6 +182,14 @@ void Controller::receiveMessage(string channel, string message, void* data)
         EntityView* view = new EntityView((Entity *) data);
         views.push_back(view);
     }
+
+    if (channel == "entity" && message == "switch") {
+        cout << "I hear you";
+        world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
+        
+    }
+        
+
 
     if (channel == "entity" && message == "delete")
     {

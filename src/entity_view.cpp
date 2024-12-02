@@ -35,6 +35,10 @@ map<EntityType, SpriteSheetInfo> spriteMapping = {
 { Goal, {"resources/golden_wall.png", 1, {
 	{Right, 0}}
 } }
+,
+{ Switch, {"resources/blue_wall.png", 1, {
+	{Right, 0}}
+} }
 };
 
 EntityView::EntityView(Entity *entity)
