@@ -68,8 +68,9 @@ void Controller::gameLoop()
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
 
-    //y = 352-32
-    //switch enables world.addEntity(160, 352 -32 -128, 32, 32, Goal);
+
+    world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
+
 
     y = 352;
     for (x = 160; x <= 640; x += 32) {
@@ -182,13 +183,6 @@ void Controller::receiveMessage(string channel, string message, void* data)
         EntityView* view = new EntityView((Entity *) data);
         views.push_back(view);
     }
-
-    if (channel == "entity" && message == "switch") {
-        cout << "I hear you";
-        world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
-        
-    }
-        
 
 
     if (channel == "entity" && message == "delete")

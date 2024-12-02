@@ -27,7 +27,7 @@ void PlayerEntity::tick()
 {
 
 	if (getX() == 320 && getY() > 317 && getY() < 321) {
-		string text = "'W' to fly \n\n'A' and 'D' to move.\n\n'SPACE' to flip gravity.";
+		string text = "'W' to fly \n\n'A' and 'D' to move.\n\n'SPACE' to flip gravity.\n\nBeware of the blue tile...";
 		DrawText(text.c_str(), 10, 350, 30, BLACK);
 	}
 
@@ -116,9 +116,8 @@ bool PlayerEntity::handleCollisions()
 	for (Entity* entity : collisions)
 	{
 		if (entity->getType() == Switch) {
-			world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
-			PubSub::publish("action", "switch", 0);
-			cout << "hi";
+			flip = true;
+			
 		}
 		if (entity->getType() == Goal) {
 
