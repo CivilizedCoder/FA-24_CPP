@@ -44,6 +44,7 @@ void Controller::gameLoop()
     keyMapping[KEY_S] = PlayerDown;
     keyMapping[KEY_D] = PlayerRight;
     keyMapping[KEY_SPACE] = PlayerJump;
+    keyMapping[KEY_R] = PlayerReset;
 
     PubSub::subscribe("entity", this);
     PubSub::subscribe("player", this);
@@ -56,72 +57,87 @@ void Controller::gameLoop()
     float x = 320;
     float y = 280;
     world.addPlayer(x, y, 32, 32, Cat);
-
+    world.addEntity(x + 32, y + 32, 32, 32, Fuel);
+    int tempY = 0;
+    int tempX = 0;
     
 
+    //leftWall
     x = 160;
     y = 352 - 64 - 32;
     world.addEntity(x, y, 32, 32, Obstacle);
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
-    world.addEntity(160 + 64, 352 - 64, 32, 32, Switch);
     y += 32;
     world.addEntity(x, y, 32, 32, Obstacle);
 
 
-    world.addEntity(160, 352 - 32 - 128, 32, 32, Goal);
-
-
+    //starter platform
     y = 352;
-    for (x = 160; x <= 640; x += 32) {
-        if (x < 220)
-            world.addEntity(x, y, 32, 32, Obstacle);
-        else if ((int)x % 128 == 0 && x != 640) 
-            world.addEntity(x, y, 32, 32, Bounce);
-        else if (x == 640)
-            world.addEntity(x, y, 32, 32, Phase);
-        else
-            world.addEntity(x, y, 32, 32, Obstacle);
+    for (tempX = 0; tempX <= 32 * 18; tempX += 32)
+        if(tempX != 32 * 18)
+            world.addEntity(x + tempX, y, 32, 32, Obstacle);
+ 
+    //wall of fire
+    for (tempY = 32*50; tempY >= 32 * -18; tempY -= 32)
+        world.addEntity(x + 32*17, y + tempY, 32, 32, Obstacle);  
+    tempX = 0;
+    for (tempY = 32*50; tempY >= 32 * -18; tempY -= 32)
+        world.addEntity(x + 32 * 19, y + tempY, 32, 32, Obstacle);
 
+    
+
+    //tip
+    world.addEntity(x + 32 * 17, y + tempY, 32, 32, Hurt);
+    world.addEntity(x + 32 * 16, y + tempY, 32, 32, Hurt);
+
+    world.addEntity(x + 32 * 19, y + tempY, 32, 32, Bounce);
+    world.addEntity(x + 32 * 20, y + tempY, 32, 32, Bounce);
+
+    tempY = 0;
+    tempX = 0;
+
+    //staircase left
+    for (tempX = 0; tempX >= 32 * -10; tempX -= 32) {
+        tempY += 32;
+        //world.addEntity(x + tempX, y + tempY, 32, 32, Obstacle);
     }
-    //world.addEntity(x-64, y-32, 32, 32, Bounce);
 
+    world.addEntity(x + 32 * 18, y + 32 * 55, 32, 32, Bounce);
 
+    x += 32 * 19;
+    y += 32 * 54;
 
-    x = 160;
-    y = 352 - 32 * 4;
-    for (x = 160; x <= 640; x += 32) {
-        if((int)x % 128 == 0)
-            world.addEntity(x, y, 32, 32, Hurt);
-        else
-            world.addEntity(x, y, 32, 32, Obstacle);
-
-
+    //staircase of hell
+    for (int i = 0; i < 10; ++i) {
+        world.addEntity(x + 32*i, y - 32*(i -1), 32, 32, Obstacle);
     }
-    //640
-   
-    //upward tunnel
-    x = 640;
-    y = 352;
-
-
-    for(x = 640; x < 640 + 32*5; x += 32)
-        world.addEntity(x, y, 32, 32, Hurt);
-    y -= 64+32;
-
-    for (x = 640 + 64; x > 640; x -= 32)
-        world.addEntity(x, y, 32, 32, Hurt);
-    x += 32 * 5;
-    for (y += 32 * 3; y > 64 + 32; y -= 32)
-        world.addEntity(x, y, 32, 32, Hurt);
-
-    x = 160;
-    y = 352 - 32 * 7;
-    for (x = 160; x <= 640 + 4*32; x += 32) {
-        world.addEntity(x, y, 32, 32, Bounce);
-
+    for (int i = 0; i < 10; ++i) {
+        world.addEntity(x + 32 * i, y - 32 * i, 32, 32, Hurt);
     }
-   
+
+    for (int i = 12; i < 22; ++i) {
+        world.addEntity(x + 32 * i, y - 32 * 2, 32, 32, Hurt);
+    }
+
+    for (int i = 12; i < 22; ++i) {
+        world.addEntity(x + 32 * i, y - 32*3, 32, 32, Obstacle);
+    }
+
+    world.addEntity(x + 32 * 22, y - 32 *5, 32, 32, Fuel);
+
+    for (int i = 0; i < 5; ++i) {
+        world.addEntity(x + 32 * 22, y + 64 * i, 32, 32, Bounce);
+    }
+
+    for (int i = 22; i > 10; --i) {
+        world.addEntity(x + 32 * i, y + 64 * 5, 32, 32, Bounce);
+    }
+    world.addEntity(x + 32 * 11, y + 64 * 7, 32, 32, Goal);
+    std::cout << x + 32 * 11 << "            " << y + 64 * 7 << "\n" << endl;
+
+ 
+
 
 
 
@@ -166,6 +182,8 @@ void Controller::gameLoop()
         // Draw the views
         for (EntityView *view : views)
             view->draw(viewportX, viewportY, viewportDrawX, viewportDrawY, viewportWidth, viewportHeight);
+        string data = "refresh";
+        PubSub::publish("action", "player", &data);
 
         EndDrawing();
     }
@@ -183,7 +201,6 @@ void Controller::receiveMessage(string channel, string message, void* data)
         EntityView* view = new EntityView((Entity *) data);
         views.push_back(view);
     }
-
 
     if (channel == "entity" && message == "delete")
     {
@@ -206,5 +223,7 @@ void Controller::receiveMessage(string channel, string message, void* data)
     {
         Vector2* position = (Vector2*)data;
         viewportX = position->x - viewportWidth / 2;
+        viewportY = position->y - viewportHeight * 1.25;
+        
     }
 }

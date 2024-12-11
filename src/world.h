@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum PlayerAction {CreateEnemy, PlayerUp, PlayerDown, PlayerRight, PlayerLeft, PlayerJump};
+enum PlayerAction {CreateEnemy, PlayerUp, PlayerDown, PlayerRight, PlayerLeft, PlayerJump, PlayerReset, PlayerTank};
 
 class World
 {

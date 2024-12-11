@@ -13,6 +13,8 @@ private:
 	float speedY;
 	int movementCountdown;
 	bool flip;
+	int fuel;
+	int grounded;
 
 public:
 	PlayerEntity(float x, float y, int width, int height, EntityType type);

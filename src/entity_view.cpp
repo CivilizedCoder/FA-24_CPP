@@ -28,15 +28,11 @@ map<EntityType, SpriteSheetInfo> spriteMapping = {
 { Hurt, {"resources/purple_wall.png", 1, {
 	{Right, 0}}
 } },
-{ Phase, {"resources/wall.png", 1, {
+{ Fuel, {"resources/Fuel.png", 1, {
 	{Right, 0}}
 } }
 ,
 { Goal, {"resources/golden_wall.png", 1, {
-	{Right, 0}}
-} }
-,
-{ Switch, {"resources/blue_wall.png", 1, {
 	{Right, 0}}
 } }
 };
@@ -57,7 +53,7 @@ bool EntityView::isViewFor(Entity* entity)
 void EntityView::draw(int vx, int vy, int vdx, int vdy, int vw, int vh)
 {
 
-	int animationDelay = 20;
+	int animationDelay = 5;
 	int numFrames = spriteMapping[entity->getType()].numFrames;
 
 	if (entity->getMoving())
